@@ -9,7 +9,20 @@
 import UIKit
 
 class ViewController: UIViewController {
+    
+    
+    @IBOutlet var cardButtons: [UIButton]!
+    
+    @IBAction func touchCard(_ sender: UIButton) {
+    }
 
+    @IBAction func newGame(_ sender: UIButton) {
+    }
+    
+    @IBAction func dealCards(_ sender: UIButton) {
+    }
+    
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view, typically from a nib.
