@@ -63,9 +63,13 @@ class ViewController: UIViewController {
             if game.selectedCards.contains(card){
                 deselectCard(index: cardNumber)
                 game.selectedCards.remove(at: game.selectedCards.index(of: card)!)
-            } else if game.selectedCards.count < 3, !game.selectedCards.contains(card){
+            } else if game.selectedCards.count < 3{
                 selectCard(index: cardNumber)
                 game.selectedCards.append(card)
+            }
+            if game.selectedCards.count == 3 {
+                if game.checkMatch() { print("isMatch")}
+                else { print("notMatch")}
             }
         }
     }
