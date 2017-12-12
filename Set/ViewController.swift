@@ -31,12 +31,36 @@ class ViewController: UIViewController {
     }
     
     @IBAction func touchCard(_ sender: UIButton) {
+        if let cardNumber = cardButtons.index(of: sender){
+            let card = game.faceUpCards[cardNumber]
+            if game.selectedCards.contains(card){
+                deselectCard(index: cardNumber)
+                game.selectedCards.remove(at: game.selectedCards.index(of: card)!)
+            } else if game.selectedCards.count < 3, !game.selectedCards.contains(card){
+                selectCard(index: cardNumber)
+                game.selectedCards.append(card)
+            }
+        }
     }
 
     @IBAction func newGame(_ sender: UIButton) {
     }
     
     @IBAction func dealCards(_ sender: UIButton) {
+    }
+    
+    private func selectCard(index: Int){
+        let button = cardButtons[index]
+        button.layer.borderWidth = 3.0
+        button.layer.borderColor = UIColor.red.cgColor
+        button.layer.cornerRadius = 8.0
+    }
+    
+    private func deselectCard(index: Int){
+        let button = cardButtons[index]
+        button.layer.borderWidth = 0.0
+        button.layer.borderColor = UIColor.clear.cgColor
+        button.layer.cornerRadius = 1.0
     }
     
 
