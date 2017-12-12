@@ -18,6 +18,7 @@ class ViewController: UIViewController {
     
     var cardIndex = [Int:Card]()
     var faceDownIndex = [Int]()
+    var selectedIndex = [Int]()
     
     @IBOutlet var cardButtons: [UIButton]!{
         didSet {
@@ -68,8 +69,11 @@ class ViewController: UIViewController {
                 game.selectedCards.append(card)
             }
             if game.selectedCards.count == 3 {
-                if game.checkMatch() { print("isMatch")}
-                else { print("notMatch")}
+                if game.checkMatch() {
+                    setFound()
+                } else {
+                    setMismatch()
+                }
             }
         }
     }
@@ -78,28 +82,65 @@ class ViewController: UIViewController {
     }
     
     @IBAction func dealCards(_ sender: UIButton) {
-        if faceDownIndex.count > 0 {
-            for _ in 1...3 {
-                let index = faceDownIndex.removeFirst()
-                let card = game.deckCards.removeFirst()
-                game.faceUpCards.append(card)
-                cardIndex[index] = card
+        if game.deckCards.count > 0 {
+            if game.selectedCards.count == 3, game.matchedCards.contains(game.selectedCards.first!){
+                for index in selectedIndex {
+                    let button = cardButtons[index]
+                    let card = game.deckCards.removeFirst()
+                    game.faceUpCards.append(card)
+                    cardIndex[index] = card
+                    
+                    let identifier = card.identifier
+                    let attribText = buildAttributes(identifier: identifier)
+                    button.setAttributedTitle(attribText, for: UIControlState.normal)
+                    button.isEnabled = true
+                    button.layer.mask = nil
+                    
+                    deselectCard(index: index)
+                }
                 
-                let button = cardButtons[index]
-                let identifier = card.identifier
-                let attribText = buildAttributes(identifier: identifier)
-                button.setAttributedTitle(attribText, for: UIControlState.normal)
-                button.isEnabled = true
-                button.layer.mask = nil
             }
+            
+            if faceDownIndex.count > 0 {
+                for _ in 1...3 {
+                    let index = faceDownIndex.removeFirst()
+                    let card = game.deckCards.removeFirst()
+                    game.faceUpCards.append(card)
+                    cardIndex[index] = card
+                    
+                    let button = cardButtons[index]
+                    let identifier = card.identifier
+                    let attribText = buildAttributes(identifier: identifier)
+                    button.setAttributedTitle(attribText, for: UIControlState.normal)
+                    button.isEnabled = true
+                    button.layer.mask = nil
+                }
+            }
+        }
+        
+        
+    }
+    
+    private func setFound() {
+        for index in selectedIndex{
+            let button = cardButtons[index]
+            button.layer.borderColor = UIColor.green.cgColor
+        }
+    }
+    
+    private func setMismatch() {
+        for index in selectedIndex {
+                let button = cardButtons[index]
+                button.layer.borderColor = UIColor.red.cgColor
         }
     }
     
     private func selectCard(index: Int){
         let button = cardButtons[index]
         button.layer.borderWidth = 3.0
-        button.layer.borderColor = UIColor.red.cgColor
+        button.layer.borderColor = UIColor.orange.cgColor
         button.layer.cornerRadius = 8.0
+        selectedIndex.append(index)
     }
     
     private func deselectCard(index: Int){
@@ -107,6 +148,7 @@ class ViewController: UIViewController {
         button.layer.borderWidth = 0.0
         button.layer.borderColor = UIColor.clear.cgColor
         button.layer.cornerRadius = 1.0
+        selectedIndex.remove(at: selectedIndex.index(of: index)!)
     }
     
     private func buildAttributes(identifier: [String:Int]) -> NSAttributedString{
