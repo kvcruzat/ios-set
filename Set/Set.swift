@@ -27,5 +27,13 @@ struct Set {
                 }
             }
         }
+        
+        var last = deckCards.count - 1
+        
+        while last > 0 {
+            let rand = Int(arc4random_uniform(UInt32(last)))
+            deckCards.swapAt(last, rand)
+            last -= 1
+        }
     }
 }
