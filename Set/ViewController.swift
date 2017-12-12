@@ -16,7 +16,19 @@ class ViewController: UIViewController {
     let colours = [UIColor.red, UIColor.orange, UIColor.black]
     let shadings = ["filled", "outline", "striped"]
     
-    @IBOutlet var cardButtons: [UIButton]!
+    @IBOutlet var cardButtons: [UIButton]!{
+        didSet {
+            for index in cardButtons.indices {
+                let card = game.deckCards.removeFirst()
+                game.faceUpCards.append(card)
+                
+                let button = cardButtons[index]
+                let identifier = game.faceUpCards[index].identifier
+                let buttonTitle = String(repeating: shapes[identifier["shape"]!], count: identifier["amount"]!)
+                button.setTitle(buttonTitle, for: UIControlState.normal)
+            }
+        }
+    }
     
     @IBAction func touchCard(_ sender: UIButton) {
     }
