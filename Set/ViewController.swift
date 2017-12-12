@@ -10,6 +10,11 @@ import UIKit
 
 class ViewController: UIViewController {
     
+    lazy var game = Set()
+    
+    let shapes = ["▲", "●", "■"]
+    let colours = [UIColor.red, UIColor.orange, UIColor.black]
+    let shadings = ["filled", "outline", "striped"]
     
     @IBOutlet var cardButtons: [UIButton]!
     
@@ -22,17 +27,6 @@ class ViewController: UIViewController {
     @IBAction func dealCards(_ sender: UIButton) {
     }
     
-    
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        // Do any additional setup after loading the view, typically from a nib.
-    }
-
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
-    }
-
 
 }
 
