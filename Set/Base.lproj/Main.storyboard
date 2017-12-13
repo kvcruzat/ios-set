@@ -358,12 +358,13 @@
                             <constraint firstItem="qga-ja-Mwv" firstAttribute="leading" secondItem="CVT-zF-SMW" secondAttribute="leading" id="o9d-PB-5N9"/>
                             <constraint firstItem="6Tk-OE-BBY" firstAttribute="bottom" secondItem="AS8-kk-vTc" secondAttribute="bottom" constant="16" id="r09-QE-IZp"/>
                             <constraint firstItem="AS8-kk-vTc" firstAttribute="top" secondItem="qga-ja-Mwv" secondAttribute="bottom" constant="20" id="u8o-5A-MIy"/>
-                            <constraint firstItem="udp-zC-uSb" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="AS8-kk-vTc" secondAttribute="trailing" symbolic="YES" id="uNr-kB-Tzu"/>
+                            <constraint firstItem="udp-zC-uSb" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="AS8-kk-vTc" secondAttribute="trailing" constant="8" symbolic="YES" id="uNr-kB-Tzu"/>
                             <constraint firstItem="CVT-zF-SMW" firstAttribute="centerY" secondItem="AS8-kk-vTc" secondAttribute="centerY" id="ys6-kl-z3c"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
                     </view>
                     <connections>
+                        <outlet property="scoreLabel" destination="udp-zC-uSb" id="oG2-qx-Qff"/>
                         <outlet property="view" destination="Mnh-k9-fu9" id="px5-q0-aT3"/>
                         <outletCollection property="cardButtons" destination="6Kl-0R-fpD" collectionClass="NSMutableArray" id="jEk-4W-1rH"/>
                         <outletCollection property="cardButtons" destination="Mnh-k9-fu9" collectionClass="NSMutableArray" id="Heg-UL-v1J"/>

@@ -20,39 +20,11 @@ class ViewController: UIViewController {
     var faceDownIndex = [Int]()
     var selectedIndex = [Int]()
     
+    @IBOutlet weak var scoreLabel: UILabel!
+    
     @IBOutlet var cardButtons: [UIButton]!{
         didSet {
-            var cardArray: [Int] = Array(0...cardButtons.count-1)
-            
-            var last = cardArray.count - 1
-
-            while last > 0 {
-                let rand = Int(arc4random_uniform(UInt32(last)))
-                cardArray.swapAt(last, rand)
-                last -= 1
-            }
-            
-            while game.faceUpCards.count < 12{
-                let index = cardArray.removeFirst()
-            
-                let card = game.deckCards.removeFirst()
-                game.faceUpCards.append(card)
-                
-                let button = cardButtons[index]
-                let identifier = card.identifier
-                let attribText = buildAttributes(identifier: identifier)
-                button.setAttributedTitle(attribText, for: UIControlState.normal)
-                
-                cardIndex[index] = card
-            }
-            for index in cardArray {
-                let button = cardButtons[index]
-                let layer = CAShapeLayer()
-                layer.frame = .zero
-                button.layer.mask = layer
-                button.isEnabled = false
-            }
-            faceDownIndex = cardArray
+            loadCardButtons()
         }
     }
     
@@ -61,12 +33,17 @@ class ViewController: UIViewController {
             print("card number \(cardNumber)")
             let card = cardIndex[cardNumber]!
             print("\(card.identifier["colour"]!), \(shadings[card.identifier["shading"]!])")
-            if game.selectedCards.contains(card){
+            if selectedIndex.count == 3, game.matchedCards.contains(game.selectedCards.first!){
+                dealCards(sender)
+                if !game.matchedCards.contains(card){
+                    selectCard(index: cardNumber)
+                }
+
+            }
+            else if game.selectedCards.contains(card){
                 deselectCard(index: cardNumber)
-                game.selectedCards.remove(at: game.selectedCards.index(of: card)!)
             } else if game.selectedCards.count < 3{
                 selectCard(index: cardNumber)
-                game.selectedCards.append(card)
             }
             if game.selectedCards.count == 3 {
                 if game.checkMatch() {
@@ -79,12 +56,19 @@ class ViewController: UIViewController {
     }
 
     @IBAction func newGame(_ sender: UIButton) {
+        game = Set();
+        cardIndex.removeAll()
+        faceDownIndex.removeAll()
+        selectedIndex.removeAll()
+        loadCardButtons()
     }
     
     @IBAction func dealCards(_ sender: UIButton) {
         if game.deckCards.count > 0 {
             if game.selectedCards.count == 3, game.matchedCards.contains(game.selectedCards.first!){
                 for index in selectedIndex {
+                    deselectCard(index: index)
+                    
                     let button = cardButtons[index]
                     let card = game.deckCards.removeFirst()
                     game.faceUpCards.append(card)
@@ -96,12 +80,10 @@ class ViewController: UIViewController {
                     button.isEnabled = true
                     button.layer.mask = nil
                     
-                    deselectCard(index: index)
+                    
                 }
                 
-            }
-            
-            if faceDownIndex.count > 0 {
+            } else if faceDownIndex.count > 0 {
                 for _ in 1...3 {
                     let index = faceDownIndex.removeFirst()
                     let card = game.deckCards.removeFirst()
@@ -116,7 +98,20 @@ class ViewController: UIViewController {
                     button.layer.mask = nil
                 }
             }
+        } else {
+            if game.selectedCards.count == 3, game.matchedCards.contains(game.selectedCards.first!) {
+                for index in selectedIndex {
+                    let button = cardButtons[index]
+                    let layer = CAShapeLayer()
+                    layer.frame = .zero
+                    button.layer.mask = layer
+                    button.isEnabled = false
+                    deselectCard(index: index)
+                }
+            }
         }
+        
+        scoreLabel.text = "Score: \(game.deckCards.count + game.faceUpCards.count)"
         
         
     }
@@ -136,19 +131,24 @@ class ViewController: UIViewController {
     }
     
     private func selectCard(index: Int){
+        let card = cardIndex[index]!
         let button = cardButtons[index]
         button.layer.borderWidth = 3.0
         button.layer.borderColor = UIColor.orange.cgColor
         button.layer.cornerRadius = 8.0
         selectedIndex.append(index)
+        game.selectedCards.append(card)
+        
     }
     
     private func deselectCard(index: Int){
+        let card = cardIndex[index]!
         let button = cardButtons[index]
         button.layer.borderWidth = 0.0
         button.layer.borderColor = UIColor.clear.cgColor
         button.layer.cornerRadius = 1.0
         selectedIndex.remove(at: selectedIndex.index(of: index)!)
+        game.selectedCards.remove(at: game.selectedCards.index(of: card)!)
     }
     
     private func buildAttributes(identifier: [String:Int]) -> NSAttributedString{
@@ -171,6 +171,46 @@ class ViewController: UIViewController {
         
         let buttonTitle = String(repeating: shapes[identifier["shape"]!], count: identifier["amount"]!)
         return NSAttributedString(string: buttonTitle, attributes: attributes)
+    }
+    
+    private func loadCardButtons() {
+        for index in cardButtons.indices {
+            let button = cardButtons[index]
+            button.isEnabled = true
+            button.layer.mask = nil
+        }
+        
+        var cardArray: [Int] = Array(0...cardButtons.count-1)
+        
+        var last = cardArray.count - 1
+        
+        while last > 0 {
+            let rand = Int(arc4random_uniform(UInt32(last)))
+            cardArray.swapAt(last, rand)
+            last -= 1
+        }
+        
+        while game.faceUpCards.count < 12{
+            let index = cardArray.removeFirst()
+            
+            let card = game.deckCards.removeFirst()
+            game.faceUpCards.append(card)
+            
+            let button = cardButtons[index]
+            let identifier = card.identifier
+            let attribText = buildAttributes(identifier: identifier)
+            button.setAttributedTitle(attribText, for: UIControlState.normal)
+            
+            cardIndex[index] = card
+        }
+        for index in cardArray {
+            let button = cardButtons[index]
+            let layer = CAShapeLayer()
+            layer.frame = .zero
+            button.layer.mask = layer
+            button.isEnabled = false
+        }
+        faceDownIndex = cardArray
     }
 
 }
