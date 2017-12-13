@@ -33,14 +33,20 @@ class ViewController: UIViewController {
             print("card number \(cardNumber)")
             let card = cardIndex[cardNumber]!
             print("\(card.identifier["colour"]!), \(shadings[card.identifier["shading"]!])")
-            if selectedIndex.count == 3, game.matchedCards.contains(game.selectedCards.first!){
-                dealCards(sender)
-                if !game.matchedCards.contains(card){
-                    selectCard(index: cardNumber)
+            if selectedIndex.count == 3{
+                if game.matchedCards.contains(game.selectedCards.first!){
+                    dealCards(sender)
+                    if !game.matchedCards.contains(card){
+                        selectCard(index: cardNumber)
+                    }
+                } else {
+                    for index in selectedIndex {
+                        deselectCard(index: index)
+                    }
                 }
-
             }
             else if game.selectedCards.contains(card){
+                game.score -= 1
                 deselectCard(index: cardNumber)
             } else if game.selectedCards.count < 3{
                 selectCard(index: cardNumber)
@@ -52,14 +58,19 @@ class ViewController: UIViewController {
                     setMismatch()
                 }
             }
+            scoreLabel.text = "Score: \(game.score)"
         }
     }
 
     @IBAction func newGame(_ sender: UIButton) {
+        for index in selectedIndex {
+            deselectCard(index: index)
+        }
         game = Set();
         cardIndex.removeAll()
         faceDownIndex.removeAll()
         selectedIndex.removeAll()
+        scoreLabel.text = "Score: \(game.score)"
         loadCardButtons()
     }
     
@@ -110,9 +121,6 @@ class ViewController: UIViewController {
                 }
             }
         }
-        
-        scoreLabel.text = "Score: \(game.deckCards.count + game.faceUpCards.count)"
-        
         
     }
     

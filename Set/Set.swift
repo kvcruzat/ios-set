@@ -15,6 +15,8 @@ struct Set {
     var matchedCards = [Card]()
     var selectedCards = [Card]()
     
+    var score = 0
+    
     mutating func checkMatch() -> Bool{
         
         var colourAttributes = [Int]()
@@ -34,9 +36,12 @@ struct Set {
         for attribute in attributes {
             if !(attribute.isUnique || attribute.isSame) {
                 print(attributes)
+                score -= 5
                 return false
+                
             }
         }
+        score += -((faceUpCards.count - 9) / 3) + 8
         
         for index in selectedCards.indices {
             let card = selectedCards[index]
