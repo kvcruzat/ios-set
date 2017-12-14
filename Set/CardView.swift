@@ -1,0 +1,86 @@
+//
+//  CardView.swift
+//  Set
+//
+//  Created by Khen Cruzat on 14/12/2017.
+//  Copyright © 2017 Khen Cruzat. All rights reserved.
+//
+
+import UIKit
+
+@IBDesignable
+class CardView: UIView {
+    
+    var colour: UIColor = UIColor.red { didSet{ setNeedsDisplay(); setNeedsLayout()}}
+    var shape: String = "diamond" { didSet{ setNeedsDisplay(); setNeedsLayout()}}
+    var amount: Int = 3 { didSet{ setNeedsDisplay(); setNeedsLayout()}}
+    var shading: String = "striped" { didSet{ setNeedsDisplay(); setNeedsLayout()}}
+    
+    private lazy var shapes = createShapes()
+
+    override func draw(_ rect: CGRect) {
+        let roundedRect = UIBezierPath(roundedRect: bounds, cornerRadius: 16.0)
+        roundedRect.addClip()
+        UIColor.white.setFill()
+        roundedRect.fill()
+    }
+
+    private func createShapes() -> [UIView] {
+        var shapeCollection = [ShapesView]()
+        for _ in 1...amount {
+            let shapeView = ShapesView()
+            shapeView.colour = colour
+            shapeView.shading = shading
+            shapeView.shape = shape
+            shapeView.isOpaque = false
+            shapeView.addConstraint(NSLayoutConstraint(item: shapeView,
+                                                        attribute: .width,
+                                                        relatedBy: .equal,
+                                                        toItem: shapeView,
+                                                        attribute: .height,
+                                                        multiplier: 8.0/5.0,
+                                                        constant: 0))
+            shapeCollection.append(shapeView)
+        }
+
+        return shapeCollection
+    }
+    
+    override func layoutSubviews() {
+        super.layoutSubviews()
+        
+        let shapesBounds = bounds.size.applying(CGAffineTransform.identity.scaledBy(x: 0.7, y: 0.7))
+        let shapeSize = shapesBounds.applying(CGAffineTransform.identity.scaledBy(x: 1.0, y: 0.3))
+        var shapeCentres = [CGPoint]()
+        
+        switch amount {
+        case 1:
+            shapeCentres.append(CGPoint(x: bounds.midX, y: bounds.midY))
+        case 2:
+            shapeCentres.append(CGPoint(x: bounds.midX, y: bounds.maxY/CGFloat(3)))
+            shapeCentres.append(CGPoint(x: bounds.midX, y: (bounds.maxY * CGFloat(2.0/3.0))))
+        case 3:
+            shapeCentres.append(CGPoint(x: bounds.midX, y: bounds.maxY/CGFloat(4)))
+            shapeCentres.append(CGPoint(x: bounds.midX, y: (bounds.maxY * CGFloat(2.0/4.0))))
+            shapeCentres.append(CGPoint(x: bounds.midX, y: (bounds.maxY * CGFloat(3.0/4.0))))
+        default:
+            break
+        }
+        
+        
+        for index in 0...shapes.count-1 {
+            shapes[index].frame.size = shapeSize
+            shapes[index].center = shapeCentres[index]
+            addSubview(shapes[index])
+        }
+//        let stackView = UIStackView(arrangedSubviews: shapes)
+//        stackView.axis = .vertical
+//        stackView.contentMode = UIViewContentMode.redraw
+//        stackView.distribution = UIStackViewDistribution.fillEqually
+//        stackView.alignment = UIStackViewAlignment.center
+//        stackView.spacing = UIStackView.spacingUseSystem
+//        stackView.frame.size = bounds.size.applying(CGAffineTransform.identity.scaledBy(x: 0.7, y: 0.7))
+//        stackView.center = CGPoint(x: bounds.midX,y: bounds.midY)
+//        addSubview(stackView)
+    }
+}

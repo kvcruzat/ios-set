@@ -12,13 +12,15 @@ class ViewController: UIViewController {
     
     lazy var game = Set()
     
-    let shapes = ["▲", "●", "■"]
+    let shapes = ["diamond", "oval", "squiggle"]
     let colours = [UIColor.red, UIColor.green, UIColor.blue]
     let shadings = ["filled", "outline", "striped"]
     
     var cardIndex = [Int:Card]()
     var faceDownIndex = [Int]()
     var selectedIndex = [Int]()
+    
+    @IBOutlet weak var cardView: UIView!
     
     @IBOutlet weak var scoreLabel: UILabel!
     
