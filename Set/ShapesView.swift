@@ -32,7 +32,7 @@ class ShapesView: UIView {
             path.addCurve(to: CGPoint(x: bounds.maxX/3, y: bounds.maxY/3), controlPoint1: CGPoint(x: bounds.maxX/11, y: bounds.maxY/6), controlPoint2: CGPoint(x: bounds.maxX/8, y:bounds.maxY/10))
             path.addCurve(to: CGPoint(x: bounds.maxX/1.5, y: bounds.maxY/3.2), controlPoint1: CGPoint(x: bounds.maxX/2.4, y: bounds.maxY/3), controlPoint2: CGPoint(x: bounds.maxX/2.0, y:bounds.maxY/1.5))
             path.addCurve(to: CGPoint(x: bounds.maxX/1.3, y: bounds.maxY/1.1), controlPoint1: CGPoint(x: bounds.maxX/1.1, y: bounds.maxY/10), controlPoint2: CGPoint(x: bounds.maxX, y:bounds.maxY/3))
-            path.addCurve(to: CGPoint(x: bounds.maxX/3, y: bounds.maxY/1.4), controlPoint1: CGPoint(x: bounds.maxX/2, y: bounds.maxY), controlPoint2: CGPoint(x: bounds.maxX/3, y:bounds.maxY))
+            path.addCurve(to: CGPoint(x: bounds.maxX/3, y: bounds.maxY/1.2), controlPoint1: CGPoint(x: bounds.maxX/2, y: bounds.maxY), controlPoint2: CGPoint(x: bounds.maxX/3, y:bounds.maxY))
             path.addCurve(to: CGPoint(x:0, y: bounds.maxY/1.4), controlPoint1: CGPoint(x: bounds.maxX/12, y: bounds.maxY), controlPoint2: CGPoint(x: bounds.maxX/16, y:bounds.maxY))
             path.close()
         default: break

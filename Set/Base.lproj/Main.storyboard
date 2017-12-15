@@ -19,7 +19,7 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="awb-6g-j3d">
-                                <rect key="frame" x="16" y="20" width="343" height="575"/>
+                                <rect key="frame" x="10" y="20" width="355" height="580"/>
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                             </view>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Score: 0" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="udp-zC-uSb">
@@ -54,13 +54,13 @@
                             <constraint firstItem="awb-6g-j3d" firstAttribute="top" secondItem="6Tk-OE-BBY" secondAttribute="top" id="4GU-Fn-63b"/>
                             <constraint firstItem="CVT-zF-SMW" firstAttribute="baseline" secondItem="udp-zC-uSb" secondAttribute="baseline" id="Cv5-WE-nep"/>
                             <constraint firstAttribute="trailing" relation="greaterThanOrEqual" secondItem="CVT-zF-SMW" secondAttribute="trailing" id="Ts0-nB-ltV"/>
-                            <constraint firstItem="AS8-kk-vTc" firstAttribute="top" secondItem="awb-6g-j3d" secondAttribute="bottom" constant="20" id="kAA-T1-YcR"/>
+                            <constraint firstItem="AS8-kk-vTc" firstAttribute="top" secondItem="awb-6g-j3d" secondAttribute="bottom" constant="15" id="kAA-T1-YcR"/>
                             <constraint firstAttribute="trailing" secondItem="udp-zC-uSb" secondAttribute="trailing" constant="15.5" id="lUV-Pd-6Y7"/>
                             <constraint firstItem="udp-zC-uSb" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="8bC-Xf-vdC" secondAttribute="leading" constant="20" symbolic="YES" id="moz-dJ-Zw2"/>
                             <constraint firstItem="6Tk-OE-BBY" firstAttribute="bottom" secondItem="AS8-kk-vTc" secondAttribute="bottom" constant="16" id="r09-QE-IZp"/>
-                            <constraint firstItem="awb-6g-j3d" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" constant="16" id="wk7-cM-pBL"/>
+                            <constraint firstItem="awb-6g-j3d" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" constant="10" id="wk7-cM-pBL"/>
                             <constraint firstItem="CVT-zF-SMW" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leading" constant="16" id="xVy-CI-yF5"/>
-                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="awb-6g-j3d" secondAttribute="trailing" constant="16" id="yVW-AR-BaH"/>
+                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="awb-6g-j3d" secondAttribute="trailing" constant="10" id="yVW-AR-BaH"/>
                             <constraint firstItem="CVT-zF-SMW" firstAttribute="centerY" secondItem="AS8-kk-vTc" secondAttribute="centerY" id="ys6-kl-z3c"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>

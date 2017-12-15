@@ -21,12 +21,33 @@ class ViewController: UIViewController {
     var selectedIndex = [Int]()
     lazy var grid: Grid = Grid(layout: .aspectRatio(CGFloat(5.0/8.0)))
     
-    private var tempIndex = 0
-    
     @IBOutlet weak var cardGrid: UIView! {
         didSet {
             loadCards()
+            
+            let swipe = UISwipeGestureRecognizer(target: self, action: #selector(ViewController.dealCardsToGrid))
+            swipe.direction = [.down]
+            cardGrid.addGestureRecognizer(swipe)
+            
+            let rotate = UIRotationGestureRecognizer(target: self, action: #selector(shuffleCards))
+            cardGrid.addGestureRecognizer(rotate)
         }
+        
+    }
+    
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        
+        NotificationCenter.default.addObserver(self, selector: #selector(rotated), name: NSNotification.Name.UIDeviceOrientationDidChange, object: nil)
+    }
+    
+    deinit {
+        NotificationCenter.default.removeObserver(self)
+    }
+    
+    @objc func rotated() {
+        grid.frame = cardGrid.bounds
+        redrawCards()
     }
     
     @IBOutlet weak var scoreLabel: UILabel!
@@ -52,7 +73,7 @@ class ViewController: UIViewController {
         dealCardsToGrid()
     }
     
-    private func dealCardsToGrid(){
+    @objc func dealCardsToGrid(){
         if game.deckCards.count > 0 {
             if game.selectedCards.count == 3, game.matchedCards.contains(game.selectedCards.first!){
                 for index in selectedIndex {
@@ -78,6 +99,32 @@ class ViewController: UIViewController {
             }
         }
         redrawCards()
+    }
+    
+    @objc func shuffleCards(_ sender: UIRotationGestureRecognizer){
+        if sender.state == .ended {
+            var last = cardIndex.count - 1
+            
+            while last > 0 {
+                let rand = last.arc4random
+                let tempCard = cardIndex[rand]
+                let tempCardView = cardViewIndex[rand]
+                cardIndex[rand] = cardIndex[last]
+                cardIndex[last] = tempCard
+                cardViewIndex[rand] = cardViewIndex[last]
+                cardViewIndex[last] = tempCardView
+                last -= 1
+            }
+            
+            selectedIndex.removeAll()
+            for card in game.selectedCards {
+                if let key = cardIndex.someKey(forValue: card) {
+                    selectedIndex.append(key)
+                }
+            }
+            
+            redrawCards()
+        }
     }
     
     private func loadCards(){
@@ -107,7 +154,6 @@ class ViewController: UIViewController {
         cardView.shading = shadings[card.identifier["shading"]!]
         cardView.frame = grid[index]!.insetBy(dx: 2.0, dy: 2.0)
         
-        cardView.tag = index
         let tap = UITapGestureRecognizer(target: self, action: #selector(tappedCard(_:)))
         cardView.addGestureRecognizer(tap)
         cardView.isUserInteractionEnabled = true
@@ -119,8 +165,9 @@ class ViewController: UIViewController {
     }
     
     @objc func tappedCard(_ sender: UITapGestureRecognizer){
-        let tag = sender.view?.tag
-        if let cardNumber = tag {
+        let cardView = sender.view as! CardView
+        
+        if let cardNumber = cardViewIndex.someKey(forValue: cardView) {
             let card = cardIndex[cardNumber]!
             if selectedIndex.count == 3 {
                 if game.matchedCards.contains(game.selectedCards.first!){
@@ -202,5 +249,11 @@ extension Int {
         } else {
             return 0
         }
+    }
+}
+
+extension Dictionary where Value: Equatable {
+    func someKey(forValue val: Value) -> Key? {
+        return first(where: { $1 == val })?.key
     }
 }
