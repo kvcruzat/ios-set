@@ -17,6 +17,8 @@ struct Set {
     
     var score = 0
     
+    private var multiplier = 100
+    
     mutating func checkMatch() -> Bool{
         
         var colourAttributes = [Int]()
@@ -41,7 +43,16 @@ struct Set {
                 
             }
         }
-        score += -((faceUpCards.count - 9) / 3) + 8
+        if faceUpCards.count > 39 {
+            score += 1
+            multiplier = 1
+        } else {
+            let newMultiplier = -((faceUpCards.count - 9) / 3) + 11
+            if newMultiplier < multiplier {
+                multiplier = newMultiplier
+            }
+            score += multiplier
+        }
         
         for index in selectedCards.indices {
             let card = selectedCards[index]

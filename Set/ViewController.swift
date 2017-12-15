@@ -16,8 +16,7 @@ class ViewController: UIViewController {
     let colours = [UIColor.red, #colorLiteral(red: 0.3411764801, green: 0.6235294342, blue: 0.1686274558, alpha: 1), UIColor.purple]
     let shadings = ["filled", "outline", "striped"]
     
-    var cardIndex = [Int:Card]()
-    var cardViewIndex = [Int:CardView]()
+    var cardIndex = [(cardView: CardView, card: Card)]()
     var selectedIndex = [Int]()
     lazy var grid: Grid = Grid(layout: .aspectRatio(CGFloat(5.0/8.0)))
     
@@ -56,14 +55,11 @@ class ViewController: UIViewController {
         for index in selectedIndex {
             deselectCard(index: index)
         }
-        for index in 0...cardViewIndex.count-1{
-            if let cardView = cardViewIndex[index] {
-                cardView.removeFromSuperview()
-            }
+        for (_, cardTuple) in cardIndex.enumerated() {
+            cardTuple.cardView.removeFromSuperview()
         }
         game = Set();
         cardIndex.removeAll()
-        cardViewIndex.removeAll()
         selectedIndex.removeAll()
         scoreLabel.text = "Score: \(game.score)"
         loadCards()
@@ -78,7 +74,7 @@ class ViewController: UIViewController {
             if game.selectedCards.count == 3, game.matchedCards.contains(game.selectedCards.first!){
                 for index in selectedIndex {
                     deselectCard(index: index)
-                    cardViewIndex[index]?.removeFromSuperview()
+                    cardIndex[index].cardView.removeFromSuperview()
                     loadOneCard(index: index)
                 }
             } else{
@@ -89,13 +85,14 @@ class ViewController: UIViewController {
             }
         } else {
             if game.selectedCards.count == 3, game.matchedCards.contains(game.selectedCards.first!) {
-                grid.cellCount -= 3
-                for index in selectedIndex {
-                    if let cardView = cardViewIndex[index] {
-                        cardView.removeFromSuperview()
-                    }
+                while selectedIndex.count > 0 {
+                    let index = selectedIndex.first!
+                    cardIndex[index].cardView.removeFromSuperview()
                     deselectCard(index: index)
+                    cardIndex.remove(at: index)
+                    recheckSelectedCards()
                 }
+                grid.cellCount -= 3
             }
         }
         redrawCards()
@@ -108,18 +105,17 @@ class ViewController: UIViewController {
             while last > 0 {
                 let rand = last.arc4random
                 let tempCard = cardIndex[rand]
-                let tempCardView = cardViewIndex[rand]
                 cardIndex[rand] = cardIndex[last]
                 cardIndex[last] = tempCard
-                cardViewIndex[rand] = cardViewIndex[last]
-                cardViewIndex[last] = tempCardView
                 last -= 1
             }
             
             selectedIndex.removeAll()
-            for card in game.selectedCards {
-                if let key = cardIndex.someKey(forValue: card) {
-                    selectedIndex.append(key)
+            for selectedCard in game.selectedCards {
+                for (index, cardTuple) in cardIndex.enumerated() {
+                    if selectedCard == cardTuple.card {
+                        selectedIndex.append(index)
+                    }
                 }
             }
             
@@ -137,10 +133,10 @@ class ViewController: UIViewController {
     }
     
     private func redrawCards() {
-        for index in 0...cardViewIndex.count-1 {
-            cardViewIndex[index]!.frame = grid[index]!.insetBy(dx: 2.0, dy: 2.0)
-            cardViewIndex[index]!.setNeedsDisplay()
-            cardViewIndex[index]!.setNeedsLayout()
+        for index in cardIndex.indices{
+            cardIndex[index].cardView.frame = grid[index]!.insetBy(dx: 2.0, dy: 2.0)
+            cardIndex[index].cardView.setNeedsDisplay()
+            cardIndex[index].cardView.setNeedsLayout()
         }
     }
     
@@ -159,21 +155,31 @@ class ViewController: UIViewController {
         cardView.isUserInteractionEnabled = true
         
         cardGrid.addSubview(cardView)
-        cardViewIndex[index] = cardView
-        cardIndex[index] = card
+        if index < cardIndex.count - 1 { cardIndex[index] = (cardView, card) }
+        else { cardIndex.append((cardView, card))}
         game.faceUpCards.append(card)
     }
     
     @objc func tappedCard(_ sender: UITapGestureRecognizer){
         let cardView = sender.view as! CardView
         
-        if let cardNumber = cardViewIndex.someKey(forValue: cardView) {
-            let card = cardIndex[cardNumber]!
+        var card: Card?
+        var cardNumber: Int?
+        
+        for (index, cardTuple) in cardIndex.enumerated() {
+            if cardView == cardTuple.cardView {
+                card = cardTuple.card
+                cardNumber = index
+            }
+        }
+        
+        
+        if card != nil, cardNumber != nil{
             if selectedIndex.count == 3 {
                 if game.matchedCards.contains(game.selectedCards.first!){
                     dealCardsToGrid()
-                    if !game.matchedCards.contains(card){
-                        selectCard(index: cardNumber)
+                    if !game.matchedCards.contains(card!){
+                        selectCard(index: cardNumber!)
                     }
                 } else {
                     for index in selectedIndex {
@@ -181,11 +187,11 @@ class ViewController: UIViewController {
                     }
                 }
             }
-            else if game.selectedCards.contains(card){
+            else if game.selectedCards.contains(card!){
                 game.score -= 1
-                deselectCard(index: cardNumber)
+                deselectCard(index: cardNumber!)
             } else if game.selectedCards.count < 3{
-                selectCard(index: cardNumber)
+                selectCard(index: cardNumber!)
             }
             if game.selectedCards.count == 3 {
                 if game.checkMatch() {
@@ -200,42 +206,47 @@ class ViewController: UIViewController {
     
     private func setFound() {
         for index in selectedIndex{
-            if let cardView = cardViewIndex[index] {
-                cardView.layer.borderColor = UIColor.green.cgColor
-            }
+            cardIndex[index].cardView.layer.borderColor = UIColor.green.cgColor
         }
     }
     
     private func setMismatch() {
         for index in selectedIndex {
-            if let cardView = cardViewIndex[index] {
-                cardView.layer.borderColor = UIColor.red.cgColor
-            }
+            cardIndex[index].cardView.layer.borderColor = UIColor.red.cgColor
         }
     }
     
     private func selectCard(index: Int){
-        let card = cardIndex[index]!
-        if let cardView = cardViewIndex[index] {
-            cardView.layer.borderWidth = 3.0
-            cardView.layer.borderColor = UIColor.orange.cgColor
-            cardView.layer.cornerRadius = 8.0
-            selectedIndex.append(index)
-            game.selectedCards.append(card)
-        }
+        let card = cardIndex[index].card
+        let cardView = cardIndex[index].cardView
+        cardView.layer.borderWidth = 3.0
+        cardView.layer.borderColor = UIColor.orange.cgColor
+        cardView.layer.cornerRadius = 8.0
+        selectedIndex.append(index)
+        game.selectedCards.append(card)
         
     }
     
     private func deselectCard(index: Int){
-        let card = cardIndex[index]!
-        if let cardView = cardViewIndex[index] {
-            cardView.layer.borderWidth = 0.0
-            cardView.layer.borderColor = UIColor.clear.cgColor
-            cardView.layer.cornerRadius = 1.0
-            selectedIndex.remove(at: selectedIndex.index(of: index)!)
-            game.selectedCards.remove(at: game.selectedCards.index(of: card)!)
+        let card = cardIndex[index].card
+        let cardView = cardIndex[index].cardView
+        cardView.layer.borderWidth = 0.0
+        cardView.layer.borderColor = UIColor.clear.cgColor
+        cardView.layer.cornerRadius = 1.0
+
+        selectedIndex.remove(at: selectedIndex.index(of: index)!)
+        game.selectedCards.remove(at: game.selectedCards.index(of: card)!)
+    }
+    
+    private func recheckSelectedCards() {
+        selectedIndex.removeAll()
+        for card in game.selectedCards {
+            for (index, cardTuple) in cardIndex.enumerated() {
+                if cardTuple.card == card {
+                    selectedIndex.append(index)
+                }
+            }
         }
-        
     }
 
 }
@@ -257,3 +268,4 @@ extension Dictionary where Value: Equatable {
         return first(where: { $1 == val })?.key
     }
 }
+
