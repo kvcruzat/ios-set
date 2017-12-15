@@ -67,7 +67,7 @@
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
                     </view>
                     <connections>
-                        <outlet property="cardView" destination="awb-6g-j3d" id="dwo-gl-gaO"/>
+                        <outlet property="cardGrid" destination="awb-6g-j3d" id="7TW-fc-xSS"/>
                         <outlet property="scoreLabel" destination="udp-zC-uSb" id="oG2-qx-Qff"/>
                     </connections>
                 </viewController>

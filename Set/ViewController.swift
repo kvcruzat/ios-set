@@ -20,7 +20,25 @@ class ViewController: UIViewController {
     var faceDownIndex = [Int]()
     var selectedIndex = [Int]()
     
-    @IBOutlet weak var cardView: UIView!
+    @IBOutlet weak var cardGrid: UIView! {
+        didSet {
+            var grid = Grid(layout: .aspectRatio(CGFloat(5.0/8.0)), frame: cardGrid.bounds)
+            grid.cellCount = 12
+            
+            for cell in 0...grid.cellCount-1 {
+                let cardView = CardView()
+                let card = game.deckCards.removeFirst()
+                cardView.isOpaque = false
+                cardView.colour = colours[card.identifier["colour"]!]
+                cardView.shape = shapes[card.identifier["shape"]!]
+                cardView.amount = card.identifier["amount"]!
+                cardView.shading = shadings[card.identifier["shading"]!]
+                cardView.frame = grid[cell]!.insetBy(dx: 2.0, dy: 2.0)
+                cardGrid.addSubview(cardView)
+                cardIndex[cell] = card
+            }
+        }
+    }
     
     @IBOutlet weak var scoreLabel: UILabel!
     
