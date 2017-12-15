@@ -13,13 +13,15 @@ class ViewController: UIViewController {
     lazy var game = Set()
     
     let shapes = ["diamond", "oval", "squiggle"]
-    let colours = [UIColor.red, UIColor.green, UIColor.blue]
+    let colours = [UIColor.red, #colorLiteral(red: 0.3411764801, green: 0.6235294342, blue: 0.1686274558, alpha: 1), UIColor.purple]
     let shadings = ["filled", "outline", "striped"]
     
     var cardIndex = [Int:Card]()
     var cardViewIndex = [Int:CardView]()
     var selectedIndex = [Int]()
     lazy var grid: Grid = Grid(layout: .aspectRatio(CGFloat(5.0/8.0)))
+    
+    private var tempIndex = 0
     
     @IBOutlet weak var cardGrid: UIView! {
         didSet {
@@ -28,40 +30,6 @@ class ViewController: UIViewController {
     }
     
     @IBOutlet weak var scoreLabel: UILabel!
-    
-//    @IBAction func touchCard(_ sender: UIButton) {
-//        if let cardNumber = cardButtons.index(of: sender){
-//            print("card number \(cardNumber)")
-//            let card = cardIndex[cardNumber]!
-//            print("\(card.identifier["colour"]!), \(shadings[card.identifier["shading"]!])")
-//            if selectedIndex.count == 3{
-//                if game.matchedCards.contains(game.selectedCards.first!){
-//                    dealCards(sender)
-//                    if !game.matchedCards.contains(card){
-//                        selectCard(index: cardNumber)
-//                    }
-//                } else {
-//                    for index in selectedIndex {
-//                        deselectCard(index: index)
-//                    }
-//                }
-//            }
-//            else if game.selectedCards.contains(card){
-//                game.score -= 1
-//                deselectCard(index: cardNumber)
-//            } else if game.selectedCards.count < 3{
-//                selectCard(index: cardNumber)
-//            }
-//            if game.selectedCards.count == 3 {
-//                if game.checkMatch() {
-//                    setFound()
-//                } else {
-//                    setMismatch()
-//                }
-//            }
-//            scoreLabel.text = "Score: \(game.score)"
-//        }
-//    }
 
     @IBAction func newGame(_ sender: UIButton) {
         for index in selectedIndex {
@@ -81,6 +49,10 @@ class ViewController: UIViewController {
     }
     
     @IBAction func dealCards(_ sender: UIButton) {
+        dealCardsToGrid()
+    }
+    
+    private func dealCardsToGrid(){
         if game.deckCards.count > 0 {
             if game.selectedCards.count == 3, game.matchedCards.contains(game.selectedCards.first!){
                 for index in selectedIndex {
@@ -106,7 +78,6 @@ class ViewController: UIViewController {
             }
         }
         redrawCards()
-        
     }
     
     private func loadCards(){
@@ -135,11 +106,49 @@ class ViewController: UIViewController {
         cardView.amount = card.identifier["amount"]!
         cardView.shading = shadings[card.identifier["shading"]!]
         cardView.frame = grid[index]!.insetBy(dx: 2.0, dy: 2.0)
+        
+        cardView.tag = index
+        let tap = UITapGestureRecognizer(target: self, action: #selector(tappedCard(_:)))
+        cardView.addGestureRecognizer(tap)
+        cardView.isUserInteractionEnabled = true
+        
         cardGrid.addSubview(cardView)
         cardViewIndex[index] = cardView
         cardIndex[index] = card
         game.faceUpCards.append(card)
-        
+    }
+    
+    @objc func tappedCard(_ sender: UITapGestureRecognizer){
+        let tag = sender.view?.tag
+        if let cardNumber = tag {
+            let card = cardIndex[cardNumber]!
+            if selectedIndex.count == 3 {
+                if game.matchedCards.contains(game.selectedCards.first!){
+                    dealCardsToGrid()
+                    if !game.matchedCards.contains(card){
+                        selectCard(index: cardNumber)
+                    }
+                } else {
+                    for index in selectedIndex {
+                        deselectCard(index: index)
+                    }
+                }
+            }
+            else if game.selectedCards.contains(card){
+                game.score -= 1
+                deselectCard(index: cardNumber)
+            } else if game.selectedCards.count < 3{
+                selectCard(index: cardNumber)
+            }
+            if game.selectedCards.count == 3 {
+                if game.checkMatch() {
+                    setFound()
+                } else {
+                    setMismatch()
+                }
+            }
+        }
+        scoreLabel.text = "Score: \(game.score)"
     }
     
     private func setFound() {

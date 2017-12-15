@@ -12,7 +12,7 @@ import UIKit
 class CardView: UIView {
     
     var colour: UIColor = UIColor.red { didSet{ setNeedsDisplay(); setNeedsLayout()}}
-    var shape: String = "diamond" { didSet{ setNeedsDisplay(); setNeedsLayout()}}
+    var shape: String = "squiggle" { didSet{ setNeedsDisplay(); setNeedsLayout()}}
     var amount: Int = 3 { didSet{ setNeedsDisplay(); setNeedsLayout()}}
     var shading: String = "striped" { didSet{ setNeedsDisplay(); setNeedsLayout()}}
     
@@ -73,14 +73,5 @@ class CardView: UIView {
             shapes[index].center = shapeCentres[index]
             addSubview(shapes[index])
         }
-//        let stackView = UIStackView(arrangedSubviews: shapes)
-//        stackView.axis = .vertical
-//        stackView.contentMode = UIViewContentMode.redraw
-//        stackView.distribution = UIStackViewDistribution.fillEqually
-//        stackView.alignment = UIStackViewAlignment.center
-//        stackView.spacing = UIStackView.spacingUseSystem
-//        stackView.frame.size = bounds.size.applying(CGAffineTransform.identity.scaledBy(x: 0.7, y: 0.7))
-//        stackView.center = CGPoint(x: bounds.midX,y: bounds.midY)
-//        addSubview(stackView)
     }
 }

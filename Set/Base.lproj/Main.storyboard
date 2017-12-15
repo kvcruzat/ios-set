@@ -54,11 +54,10 @@
                             <constraint firstItem="awb-6g-j3d" firstAttribute="top" secondItem="6Tk-OE-BBY" secondAttribute="top" id="4GU-Fn-63b"/>
                             <constraint firstItem="CVT-zF-SMW" firstAttribute="baseline" secondItem="udp-zC-uSb" secondAttribute="baseline" id="Cv5-WE-nep"/>
                             <constraint firstAttribute="trailing" relation="greaterThanOrEqual" secondItem="CVT-zF-SMW" secondAttribute="trailing" id="Ts0-nB-ltV"/>
-                            <constraint firstItem="udp-zC-uSb" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="6Tk-OE-BBY" secondAttribute="leading" constant="302" id="jil-CO-nOm"/>
                             <constraint firstItem="AS8-kk-vTc" firstAttribute="top" secondItem="awb-6g-j3d" secondAttribute="bottom" constant="20" id="kAA-T1-YcR"/>
                             <constraint firstAttribute="trailing" secondItem="udp-zC-uSb" secondAttribute="trailing" constant="15.5" id="lUV-Pd-6Y7"/>
+                            <constraint firstItem="udp-zC-uSb" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="8bC-Xf-vdC" secondAttribute="leading" constant="20" symbolic="YES" id="moz-dJ-Zw2"/>
                             <constraint firstItem="6Tk-OE-BBY" firstAttribute="bottom" secondItem="AS8-kk-vTc" secondAttribute="bottom" constant="16" id="r09-QE-IZp"/>
-                            <constraint firstItem="udp-zC-uSb" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="AS8-kk-vTc" secondAttribute="trailing" constant="8" symbolic="YES" id="uNr-kB-Tzu"/>
                             <constraint firstItem="awb-6g-j3d" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" constant="16" id="wk7-cM-pBL"/>
                             <constraint firstItem="CVT-zF-SMW" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leading" constant="16" id="xVy-CI-yF5"/>
                             <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="awb-6g-j3d" secondAttribute="trailing" constant="16" id="yVW-AR-BaH"/>
