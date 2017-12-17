@@ -19,6 +19,57 @@ struct Set {
     
     private var multiplier = 100
     
+    mutating func drawOneCard() {
+        if deckCards.count > 0 {
+            let card = deckCards.removeFirst()
+            faceUpCards.append(card)
+        }
+    }
+    
+    mutating func drawThreeCards() {
+        for _ in 1...3 {
+            drawOneCard()
+        }
+    }
+    
+    mutating func replaceCards(set: [Card]){
+        if deckCards.count > 0 {
+            for card in set {
+                faceUpCards[faceUpCards.index(of: card)!] = deckCards.removeFirst()
+            }
+        } else {
+            for card in set {
+                faceUpCards.remove(at: faceUpCards.index(of: card)!)
+            }
+        }
+    }
+    
+    mutating func touchCard(card: Card){
+        if selectedCards.count == 3 {
+            if matchedCards.contains(array: selectedCards) {
+                replaceCards(set: selectedCards)
+                selectedCards.removeAll()
+                if !matchedCards.contains(card){ selectedCards.append(card) }
+            } else {
+                selectedCards.removeAll()
+            }
+        } else if selectedCards.contains(card) {
+            score -= 1
+            selectedCards.remove(at: selectedCards.index(of: card)!)
+        } else if selectedCards.count < 3 { selectedCards.append(card)}
+    }
+    
+    mutating func shuffleCards() {
+        var last = faceUpCards.count - 1
+        
+        while last > 0 {
+            let rand = last.arc4random
+            faceUpCards.swapAt(rand, last)
+            last -= 1
+        }
+        
+    }
+    
     mutating func checkMatch() -> Bool{
         
         var colourAttributes = [Int]()
@@ -54,10 +105,10 @@ struct Set {
             score += multiplier
         }
         
-        for index in selectedCards.indices {
-            let card = selectedCards[index]
-            faceUpCards.remove(at: faceUpCards.index(of: card)!)
-        }
+//        for index in selectedCards.indices {
+//            let card = selectedCards[index]
+//            faceUpCards.remove(at: faceUpCards.index(of: card)!)
+//        }
         
         matchedCards += selectedCards
         
@@ -85,6 +136,10 @@ struct Set {
             deckCards.swapAt(last, rand)
             last -= 1
         }
+        
+        for _ in 1...12 {
+            drawOneCard()
+        }
     }
 }
 
@@ -107,6 +162,15 @@ extension Array where Element: Equatable {
                 print("\(self[index]) != \(self[index-1])")
                 return false
             }
+        }
+        return true
+    }
+}
+
+extension Array where Element: Equatable {
+    func contains(array: [Element]) -> Bool {
+        for item in array {
+            if !self.contains(item) { return false }
         }
         return true
     }

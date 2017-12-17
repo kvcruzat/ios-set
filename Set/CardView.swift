@@ -11,6 +11,8 @@ import UIKit
 @IBDesignable
 class CardView: UIView {
     
+    var card: Card?
+    
     var colour: UIColor = UIColor.red { didSet{ setNeedsDisplay(); setNeedsLayout()}}
     var shape: String = "squiggle" { didSet{ setNeedsDisplay(); setNeedsLayout()}}
     var amount: Int = 3 { didSet{ setNeedsDisplay(); setNeedsLayout()}}
@@ -73,5 +75,8 @@ class CardView: UIView {
             shapes[index].center = shapeCentres[index]
             addSubview(shapes[index])
         }
+        
     }
+
+    
 }
