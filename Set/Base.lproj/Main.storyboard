@@ -19,27 +19,16 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="awb-6g-j3d">
-                                <rect key="frame" x="10" y="20" width="355" height="580"/>
-                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <rect key="frame" x="10" y="20" width="355" height="553.5"/>
                             </view>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Score: 0" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="udp-zC-uSb">
-                                <rect key="frame" x="302" y="624" width="57.5" height="18"/>
-                                <fontDescription key="fontDescription" type="system" pointSize="15"/>
+                                <rect key="frame" x="154" y="625.5" width="67.5" height="21.5"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="18"/>
                                 <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="AS8-kk-vTc">
-                                <rect key="frame" x="106.5" y="615" width="162" height="36"/>
-                                <fontDescription key="fontDescription" type="system" pointSize="20"/>
-                                <state key="normal" title="Deal 3 More Cards">
-                                    <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                </state>
-                                <connections>
-                                    <action selector="dealCards:" destination="BYZ-38-t0r" eventType="touchUpInside" id="50I-5k-7nP"/>
-                                </connections>
-                            </button>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="CVT-zF-SMW">
-                                <rect key="frame" x="16" y="618" width="75" height="30"/>
+                                <rect key="frame" x="10" y="621.5" width="75" height="30"/>
                                 <state key="normal" title="New Game">
                                     <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 </state>
@@ -47,21 +36,54 @@
                                     <action selector="newGame:" destination="BYZ-38-t0r" eventType="touchUpInside" id="KKv-pc-ten"/>
                                 </connections>
                             </button>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="AS8-kk-vTc">
+                                <rect key="frame" x="30" y="582" width="142.5" height="36"/>
+                                <color key="backgroundColor" white="0.66666666666666663" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="20"/>
+                                <state key="normal" title="Deal">
+                                    <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                </state>
+                                <userDefinedRuntimeAttributes>
+                                    <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
+                                        <integer key="value" value="5"/>
+                                    </userDefinedRuntimeAttribute>
+                                </userDefinedRuntimeAttributes>
+                                <connections>
+                                    <action selector="dealCards:" destination="BYZ-38-t0r" eventType="touchUpInside" id="50I-5k-7nP"/>
+                                </connections>
+                            </button>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="0 Sets" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="WcZ-cl-Z7E">
+                                <rect key="frame" x="202.5" y="582" width="142.5" height="36"/>
+                                <color key="backgroundColor" white="0.66666666666666663" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="20"/>
+                                <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <userDefinedRuntimeAttributes>
+                                    <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
+                                        <integer key="value" value="5"/>
+                                    </userDefinedRuntimeAttribute>
+                                    <userDefinedRuntimeAttribute type="boolean" keyPath="layer.masksToBounds" value="YES"/>
+                                </userDefinedRuntimeAttributes>
+                            </label>
                         </subviews>
                         <color key="backgroundColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <constraints>
-                            <constraint firstItem="AS8-kk-vTc" firstAttribute="centerX" secondItem="6Tk-OE-BBY" secondAttribute="centerX" id="36f-2u-pae"/>
+                            <constraint firstItem="AS8-kk-vTc" firstAttribute="height" secondItem="WcZ-cl-Z7E" secondAttribute="height" id="4D4-l8-mhJ"/>
                             <constraint firstItem="awb-6g-j3d" firstAttribute="top" secondItem="6Tk-OE-BBY" secondAttribute="top" id="4GU-Fn-63b"/>
-                            <constraint firstItem="CVT-zF-SMW" firstAttribute="baseline" secondItem="udp-zC-uSb" secondAttribute="baseline" id="Cv5-WE-nep"/>
-                            <constraint firstAttribute="trailing" relation="greaterThanOrEqual" secondItem="CVT-zF-SMW" secondAttribute="trailing" id="Ts0-nB-ltV"/>
-                            <constraint firstItem="AS8-kk-vTc" firstAttribute="top" secondItem="awb-6g-j3d" secondAttribute="bottom" constant="15" id="kAA-T1-YcR"/>
-                            <constraint firstAttribute="trailing" secondItem="udp-zC-uSb" secondAttribute="trailing" constant="15.5" id="lUV-Pd-6Y7"/>
-                            <constraint firstItem="udp-zC-uSb" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="8bC-Xf-vdC" secondAttribute="leading" constant="20" symbolic="YES" id="moz-dJ-Zw2"/>
-                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="bottom" secondItem="AS8-kk-vTc" secondAttribute="bottom" constant="16" id="r09-QE-IZp"/>
+                            <constraint firstItem="AS8-kk-vTc" firstAttribute="width" secondItem="WcZ-cl-Z7E" secondAttribute="width" id="5MG-uu-Ehk"/>
+                            <constraint firstItem="CVT-zF-SMW" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" constant="10" id="9mA-sa-2dl"/>
+                            <constraint firstAttribute="trailing" relation="greaterThanOrEqual" secondItem="CVT-zF-SMW" secondAttribute="trailing" constant="20" symbolic="YES" id="CZh-M4-HRK"/>
+                            <constraint firstItem="WcZ-cl-Z7E" firstAttribute="leading" secondItem="AS8-kk-vTc" secondAttribute="trailing" constant="30" id="IB6-3K-DtJ"/>
+                            <constraint firstItem="CVT-zF-SMW" firstAttribute="centerY" secondItem="udp-zC-uSb" secondAttribute="centerY" id="S9E-2M-fML"/>
+                            <constraint firstItem="udp-zC-uSb" firstAttribute="top" secondItem="AS8-kk-vTc" secondAttribute="bottom" constant="8" symbolic="YES" id="Xi9-8O-4Dk"/>
+                            <constraint firstItem="AS8-kk-vTc" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" constant="30" id="dc2-1h-RBe"/>
+                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="WcZ-cl-Z7E" secondAttribute="trailing" constant="30" id="eRz-z8-PZn"/>
+                            <constraint firstItem="udp-zC-uSb" firstAttribute="centerX" secondItem="6Tk-OE-BBY" secondAttribute="centerX" id="erf-88-Mx0"/>
+                            <constraint firstItem="AS8-kk-vTc" firstAttribute="top" secondItem="awb-6g-j3d" secondAttribute="bottom" constant="8" symbolic="YES" id="fja-3E-UIq"/>
+                            <constraint firstItem="udp-zC-uSb" firstAttribute="top" secondItem="WcZ-cl-Z7E" secondAttribute="bottom" constant="8" symbolic="YES" id="nd3-cs-KSM"/>
+                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="bottom" secondItem="udp-zC-uSb" secondAttribute="bottom" constant="20" id="toe-NE-jdQ"/>
+                            <constraint firstItem="WcZ-cl-Z7E" firstAttribute="top" secondItem="awb-6g-j3d" secondAttribute="bottom" constant="8" symbolic="YES" id="tvi-OP-c9l"/>
                             <constraint firstItem="awb-6g-j3d" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" constant="10" id="wk7-cM-pBL"/>
-                            <constraint firstItem="CVT-zF-SMW" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leading" constant="16" id="xVy-CI-yF5"/>
                             <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="awb-6g-j3d" secondAttribute="trailing" constant="10" id="yVW-AR-BaH"/>
-                            <constraint firstItem="CVT-zF-SMW" firstAttribute="centerY" secondItem="AS8-kk-vTc" secondAttribute="centerY" id="ys6-kl-z3c"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
                     </view>
