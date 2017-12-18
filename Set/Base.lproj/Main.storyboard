@@ -89,6 +89,8 @@
                     </view>
                     <connections>
                         <outlet property="cardGrid" destination="awb-6g-j3d" id="7TW-fc-xSS"/>
+                        <outlet property="dealButton" destination="AS8-kk-vTc" id="P8j-Tc-SJl"/>
+                        <outlet property="numberOfSetsLabel" destination="WcZ-cl-Z7E" id="htI-jM-3RF"/>
                         <outlet property="scoreLabel" destination="udp-zC-uSb" id="oG2-qx-Qff"/>
                     </connections>
                 </viewController>

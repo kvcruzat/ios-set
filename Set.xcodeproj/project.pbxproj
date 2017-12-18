@@ -17,6 +17,7 @@
 		C322F8A01FE2CEA0002B9844 /* ShapesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C322F89D1FE2CEA0002B9844 /* ShapesView.swift */; };
 		C3F881601FDFFADE008BFFAD /* Card.swift in Sources */ = {isa = PBXBuildFile; fileRef = C3F8815E1FDFFADE008BFFAD /* Card.swift */; };
 		C3F881611FDFFADE008BFFAD /* Set.swift in Sources */ = {isa = PBXBuildFile; fileRef = C3F8815F1FDFFADE008BFFAD /* Set.swift */; };
+		C3F92F881FE6C47100E7C5A0 /* CardBehaviour.swift in Sources */ = {isa = PBXBuildFile; fileRef = C3F92F871FE6C47100E7C5A0 /* CardBehaviour.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -32,6 +33,7 @@
 		C322F89D1FE2CEA0002B9844 /* ShapesView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ShapesView.swift; sourceTree = "<group>"; };
 		C3F8815E1FDFFADE008BFFAD /* Card.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Card.swift; sourceTree = "<group>"; };
 		C3F8815F1FDFFADE008BFFAD /* Set.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Set.swift; sourceTree = "<group>"; };
+		C3F92F871FE6C47100E7C5A0 /* CardBehaviour.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CardBehaviour.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -67,11 +69,12 @@
 				C31DD3451FDEABF60055F47D /* Supporting Files */,
 				C31DD3351FDEA9D00055F47D /* ViewController.swift */,
 				C31DD3371FDEA9D00055F47D /* Main.storyboard */,
+				C3F92F871FE6C47100E7C5A0 /* CardBehaviour.swift */,
 				C31DD33F1FDEA9D00055F47D /* Info.plist */,
 				C322F89C1FE2CE9F002B9844 /* CardView.swift */,
+				C3F8815E1FDFFADE008BFFAD /* Card.swift */,
 				C322F89B1FE2CE9F002B9844 /* Grid.swift */,
 				C322F89D1FE2CEA0002B9844 /* ShapesView.swift */,
-				C3F8815E1FDFFADE008BFFAD /* Card.swift */,
 				C3F8815F1FDFFADE008BFFAD /* Set.swift */,
 			);
 			path = Set;
@@ -164,6 +167,7 @@
 				C31DD3361FDEA9D00055F47D /* ViewController.swift in Sources */,
 				C3F881601FDFFADE008BFFAD /* Card.swift in Sources */,
 				C322F89E1FE2CEA0002B9844 /* Grid.swift in Sources */,
+				C3F92F881FE6C47100E7C5A0 /* CardBehaviour.swift in Sources */,
 				C322F89F1FE2CEA0002B9844 /* CardView.swift in Sources */,
 				C31DD3341FDEA9D00055F47D /* AppDelegate.swift in Sources */,
 			);

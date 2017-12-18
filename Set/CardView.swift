@@ -12,6 +12,7 @@ import UIKit
 class CardView: UIView {
     
     var card: Card?
+    var isFaceUp = false { didSet{ setNeedsDisplay(); setNeedsLayout()}}
     
     var colour: UIColor = UIColor.red { didSet{ setNeedsDisplay(); setNeedsLayout()}}
     var shape: String = "squiggle" { didSet{ setNeedsDisplay(); setNeedsLayout()}}
@@ -71,6 +72,7 @@ class CardView: UIView {
         
         
         for index in 0...shapes.count-1 {
+            shapes[index].isHidden = !isFaceUp
             shapes[index].frame.size = shapeSize
             shapes[index].center = shapeCentres[index]
             addSubview(shapes[index])

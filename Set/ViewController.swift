@@ -20,12 +20,18 @@ class ViewController: UIViewController {
     var selectedIndex = [Int]()
     lazy var grid: Grid = Grid(layout: .aspectRatio(CGFloat(5.0/8.0)))
     
+    private lazy var animator = UIDynamicAnimator(referenceView: cardGrid)
+    private lazy var cardBehaviour = CardBehaviour(in: animator)
+    
+    @IBOutlet weak var dealButton: UIButton!
+    @IBOutlet weak var numberOfSetsLabel: UILabel!
+    
     @IBOutlet weak var cardGrid: UIView! {
         didSet {
             grid.frame = cardGrid.bounds
             
             let swipe = UISwipeGestureRecognizer(target: self, action: #selector(ViewController.dealCards(_:)))
-            swipe.direction = [.down]
+            swipe.direction = [.up]
             cardGrid.addGestureRecognizer(swipe)
             
             let rotate = UIRotationGestureRecognizer(target: self, action: #selector(shuffleCards))
@@ -38,9 +44,10 @@ class ViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        loadStartingCards()
+        
         NotificationCenter.default.addObserver(self, selector: #selector(rotated), name: NSNotification.Name.UIDeviceOrientationDidChange, object: nil)
         
-        loadStartingCards()
     }
     
     deinit {
@@ -60,6 +67,8 @@ class ViewController: UIViewController {
         }
         cardViewList.removeAll()
         game = Set();
+        scoreLabel.text = "Score: \(game.score)"
+        numberOfSetsLabel.text = "\(game.matchedCards.count/3) Sets"
         loadStartingCards()
     }
     
@@ -74,9 +83,22 @@ class ViewController: UIViewController {
 
     
     private func redrawCards() {
+        var tempCardViews = cardViewList
         for (index, card) in game.faceUpCards.enumerated() {
-            cardViewList[cardViewList.index(where: {$0.card! == card})!].frame = grid[index]!.insetBy(dx: 2.0, dy: 2.0)
+            if let cardIndex = cardViewList.index(where: {$0.card == card}) {
+                tempCardViews[index] = cardViewList[cardIndex]
+                let cardView = cardViewList[cardIndex]
+                let newFrame = grid[index]!.insetBy(dx: 2.0, dy: 2.0)
+                UIViewPropertyAnimator.runningPropertyAnimator(
+                    withDuration: 0.4,
+                    delay: 0,
+                    options: [],
+                    animations: {
+                        cardView.frame = newFrame
+                })
+            }
         }
+        cardViewList = tempCardViews
     }
     
     @objc func shuffleCards(_ sender: UIRotationGestureRecognizer){
@@ -87,11 +109,31 @@ class ViewController: UIViewController {
     }
     
     private func loadStartingCards() {
+        dealButton.isEnabled = false
         grid.cellCount = game.faceUpCards.count
         for (index, card) in game.faceUpCards.enumerated() {
-            loadOneCard(card: card, index: index)
+            _ = loadOneCard(card: card, index: index)
         }
-        updateViewFromModel()
+        
+        for (index, cardView) in cardViewList.enumerated() {
+            UIViewPropertyAnimator.runningPropertyAnimator(
+                withDuration: 0.8,
+                delay: 0.2 + (Double(index)*0.2),
+                options: [.curveEaseInOut],
+                animations: {
+                    cardView.frame = (self.grid[index]?.insetBy(dx: 2.0, dy: 2.0))!
+                    cardView.alpha = 1
+                    },
+                completion: { position in
+                    UIView.transition(with: cardView, duration: 0.6, options: [.transitionFlipFromLeft] , animations: {
+                        cardView.isFaceUp = true },
+                        completion: { finished in
+                            if index == self.cardViewList.indices.last! {
+                                self.dealButton.isEnabled = true
+                            }
+                        })
+                    })
+        }
     }
     
     private func updateViewFromModel(){
@@ -105,9 +147,30 @@ class ViewController: UIViewController {
             if grid.cellCount < game.faceUpCards.count {
                 var gridCellCount = grid.cellCount
                 grid.cellCount = game.faceUpCards.count
+                redrawCards()
+                var newCardViews = [CardView]()
                 for card in newCards {
-                    loadOneCard(card: card, index: gridCellCount)
+                    newCardViews.append(loadOneCard(card: card, index: gridCellCount))
                     gridCellCount += 1
+                }
+                for (index, cardView) in newCardViews.enumerated() {
+                    UIViewPropertyAnimator.runningPropertyAnimator(
+                        withDuration: 0.8,
+                        delay: 0.2 + (Double(index)*0.2),
+                        options: [.curveEaseInOut],
+                        animations: {
+                            cardView.frame = self.grid[(gridCellCount-3)+index]!.insetBy(dx: 2.0, dy: 2.0)
+                            cardView.alpha = 1
+                    },
+                        completion: { position in
+                            UIView.transition(with: cardView, duration: 0.6, options: [.transitionFlipFromLeft] , animations: {
+                                cardView.isFaceUp = true
+                                if self.game.deckCards.count == 0 {
+                                    self.dealButton.backgroundColor = UIColor.clear
+                                    self.dealButton.isEnabled = false
+                                }
+                            })
+                    })
                 }
             } else {
                 grid.cellCount = game.faceUpCards.count
@@ -124,8 +187,24 @@ class ViewController: UIViewController {
                 if let oldCardIndex = cardViewList.index(where: {$0.card! == oldCards[index]}){
                     let cardView = cardViewList[oldCardIndex]
                     cardView.removeFromSuperview()
-                    cardViewList.remove(at: oldCardIndex)
-                    loadOneCard(card: newCards[index], index: oldCardIndex)
+                    let newCardView = loadOneCard(card: newCards[index], index: oldCardIndex)
+                    UIViewPropertyAnimator.runningPropertyAnimator(
+                        withDuration: 0.8,
+                        delay: 0.2 + (Double(index)*0.2),
+                        options: [.curveEaseInOut],
+                        animations: {
+                            newCardView.frame = self.grid[oldCardIndex]!.insetBy(dx: 2.0, dy: 2.0)
+                            newCardView.alpha = 1
+                    },
+                        completion: { position in
+                            UIView.transition(with: newCardView, duration: 0.6, options: [.transitionFlipFromLeft] , animations: {
+                                newCardView.isFaceUp = true
+                                if self.game.deckCards.count == 0 {
+                                    self.dealButton.backgroundColor = UIColor.clear
+                                    self.dealButton.isEnabled = false
+                                }
+                            })
+                    })
                 }
             }
             
@@ -153,12 +232,19 @@ class ViewController: UIViewController {
             }
             
             scoreLabel.text = "Score: \(game.score)"
+            
+            let setsAmount = game.matchedCards.count/3
+            if setsAmount == 1 {
+                numberOfSetsLabel.text = "\(game.matchedCards.count/3) Set"
+            } else {
+                numberOfSetsLabel.text = "\(game.matchedCards.count/3) Sets"
+            }
         }
         redrawCards()
         
     }
     
-    private func loadOneCard(card: Card, index: Int){
+    private func loadOneCard(card: Card, index: Int) -> CardView{
         let cardView = CardView()
         cardView.card = card
         cardView.isOpaque = false
@@ -166,14 +252,19 @@ class ViewController: UIViewController {
         cardView.shape = shapes[card.identifier["shape"]!]
         cardView.amount = card.identifier["amount"]!
         cardView.shading = shadings[card.identifier["shading"]!]
-        cardView.frame = grid[index]!.insetBy(dx: 2.0, dy: 2.0)
+        cardView.frame.size = grid[index]!.insetBy(dx: 2.0, dy: 2.0).size
+        cardView.center = dealButton.center
+        cardView.alpha = 0
 
         let tap = UITapGestureRecognizer(target: self, action: #selector(tappedCard(_:)))
         cardView.addGestureRecognizer(tap)
         cardView.isUserInteractionEnabled = true
 
         cardGrid.addSubview(cardView)
-        cardViewList.append(cardView)
+        if cardViewList.indices.contains(index) {
+            cardViewList[index] = cardView
+        } else { cardViewList.append(cardView) }
+        return cardView
     }
     
     @objc func tappedCard(_ sender: UITapGestureRecognizer){
@@ -184,8 +275,29 @@ class ViewController: UIViewController {
     }
     
     private func setFound(set: [CardView]) {
-        for cardView in set{
+        
+        for (index, cardView) in set.enumerated(){
             cardView.layer.borderColor = UIColor.green.cgColor
+            cardView.superview?.bringSubview(toFront: cardView)
+            
+            cardBehaviour.addItem(cardView)
+            
+            Timer.scheduledTimer(withTimeInterval: 1.5 + (Double(index)*0.1), repeats: false) { timer in
+                self.cardBehaviour.removeItem(cardView)
+                UIViewPropertyAnimator.runningPropertyAnimator(
+                withDuration: 1,
+                delay: 0,
+                options: [.curveEaseIn],
+                animations: {
+                    cardView.center = self.numberOfSetsLabel.center
+                    cardView.transform = CGAffineTransform.identity.scaledBy(x: 0.3, y: 0.3)
+                    cardView.alpha = 0
+            } )}
+        }
+
+        Timer.scheduledTimer(withTimeInterval: 3, repeats: false) { timer in
+            self.game.touchCard(card: self.game.selectedCards.first!)
+            self.updateViewFromModel()
         }
     }
     
@@ -207,6 +319,19 @@ class ViewController: UIViewController {
         cardView.layer.cornerRadius = 1.0
     }
 }
+
+struct Constants {
+    static var flipCardAnimationDuration: TimeInterval = 0.6
+    static var matchCardAnimationDuration: TimeInterval = 0.6
+    static var matchCardAnimationScaleUp: CGFloat = 3.0
+    static var matchCardAnimationScaleDown: CGFloat = 0.1
+    static var behaviorResistance: CGFloat = 0
+    static var behaviorElasticity: CGFloat = 1.0
+    static var behaviorPushMagnitudeMinimum: CGFloat = 1.0
+    static var behaviorPushMagnitudeRandomFactor: CGFloat = 1.0
+    static var cardViewScaleFactor: CGFloat = 5
+}
+
 
 extension Int {
     var arc4random: Int {
