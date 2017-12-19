@@ -10,10 +10,10 @@ import Foundation
 
 struct Set {
     
-    var deckCards = [Card]()
-    var faceUpCards = [Card]()
-    var matchedCards = [Card]()
-    var selectedCards = [Card]()
+    var deckCards = [SetCard]()
+    var faceUpCards = [SetCard]()
+    var matchedCards = [SetCard]()
+    var selectedCards = [SetCard]()
     
     var score = 0
     
@@ -32,7 +32,7 @@ struct Set {
         }
     }
     
-    mutating func replaceCards(set: [Card]){
+    mutating func replaceCards(set: [SetCard]){
         if deckCards.count > 0 {
             for card in set {
                 faceUpCards[faceUpCards.index(of: card)!] = deckCards.removeFirst()
@@ -44,7 +44,7 @@ struct Set {
         }
     }
     
-    mutating func touchCard(card: Card){
+    mutating func touchCard(card: SetCard){
         if selectedCards.count == 3 {
             if matchedCards.contains(array: selectedCards) {
                 replaceCards(set: selectedCards)
@@ -122,7 +122,7 @@ struct Set {
                 for shading in 0...2 {
                     for amount in 1...3 {
                         let id = ["colour": colour, "shape":shape, "shading":shading, "amount":amount]
-                        let card = Card(identifier: id)
+                        let card = SetCard(identifier: id)
                         deckCards.append(card)
                     }
                 }
@@ -145,10 +145,9 @@ struct Set {
 
 extension Array where Element: Equatable {
     var isUnique: Bool {
-        for index in 1...Int(count)-1 {
-            if self[index] == self[index - 1] {
-                print("\(self[index]) == \(self[index-1])")
-                return false
+        for index in 0..<Int(count)-1 {
+            for index2 in index+1..<Int(count) {
+                if self[index] == self[index2] { return false}
             }
         }
         return true

@@ -11,7 +11,7 @@ import UIKit
 @IBDesignable
 class CardView: UIView {
     
-    var card: Card?
+    var card: SetCard?
     var isFaceUp = false { didSet{ setNeedsDisplay(); setNeedsLayout()}}
     
     var colour: UIColor = UIColor.red { didSet{ setNeedsDisplay(); setNeedsLayout()}}
@@ -36,13 +36,6 @@ class CardView: UIView {
             shapeView.shading = shading
             shapeView.shape = shape
             shapeView.isOpaque = false
-            shapeView.addConstraint(NSLayoutConstraint(item: shapeView,
-                                                        attribute: .width,
-                                                        relatedBy: .equal,
-                                                        toItem: shapeView,
-                                                        attribute: .height,
-                                                        multiplier: 8.0/5.0,
-                                                        constant: 0))
             shapeCollection.append(shapeView)
         }
 

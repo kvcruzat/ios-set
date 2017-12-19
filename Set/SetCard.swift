@@ -8,8 +8,8 @@
 
 import Foundation
 
-struct Card: Equatable {
-    static func ==(lhs: Card, rhs: Card) -> Bool {
+struct SetCard: Equatable {
+    static func ==(lhs: SetCard, rhs: SetCard) -> Bool {
         return lhs.identifier == rhs.identifier
     }
     

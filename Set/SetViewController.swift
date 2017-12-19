@@ -8,7 +8,7 @@
 
 import UIKit
 
-class ViewController: UIViewController {
+class SetViewController: UIViewController {
     
     lazy var game = Set()
     
@@ -18,6 +18,12 @@ class ViewController: UIViewController {
     
     var cardViewList = [CardView]()
     var selectedIndex = [Int]()
+    var hiScore = 0  {
+        didSet {
+            UserDefaults.standard.set(hiScore, forKey: "Score")
+            hiScoreLabel.text = "Hi-Score: \(hiScore)"
+        }
+    }
     lazy var grid: Grid = Grid(layout: .aspectRatio(CGFloat(5.0/8.0)))
     
     private lazy var animator = UIDynamicAnimator(referenceView: cardGrid)
@@ -25,12 +31,20 @@ class ViewController: UIViewController {
     
     @IBOutlet weak var dealButton: UIButton!
     @IBOutlet weak var numberOfSetsLabel: UILabel!
+    @IBOutlet weak var hiScoreLabel: UILabel! {
+        didSet {
+            let defaults = UserDefaults.standard
+            if defaults.object(forKey: "Score") != nil {
+                hiScore = defaults.integer(forKey: "Score")
+            } else { hiScore = 0 }
+        }
+    }
     
     @IBOutlet weak var cardGrid: UIView! {
         didSet {
             grid.frame = cardGrid.bounds
             
-            let swipe = UISwipeGestureRecognizer(target: self, action: #selector(ViewController.dealCards(_:)))
+            let swipe = UISwipeGestureRecognizer(target: self, action: #selector(swiped(_:)))
             swipe.direction = [.up]
             cardGrid.addGestureRecognizer(swipe)
             
@@ -59,6 +73,12 @@ class ViewController: UIViewController {
         redrawCards()
     }
     
+    @objc func swiped(_ sender: UISwipeGestureRecognizer){
+        if sender.state == .ended {
+            dealCards(sender)
+        }
+    }
+    
     @IBOutlet weak var scoreLabel: UILabel!
 
     @IBAction func newGame(_ sender: UIButton) {
@@ -66,13 +86,14 @@ class ViewController: UIViewController {
             cardView.removeFromSuperview()
         }
         cardViewList.removeAll()
+        if game.score > hiScore { hiScore = game.score }
         game = Set();
         scoreLabel.text = "Score: \(game.score)"
         numberOfSetsLabel.text = "\(game.matchedCards.count/3) Sets"
         loadStartingCards()
     }
     
-    @IBAction func dealCards(_ sender: UIButton) {
+    @IBAction func dealCards(_ sender: Any) {
         if game.selectedCards.count == 3, game.matchedCards.contains(array: game.selectedCards) {
             game.touchCard(card: game.selectedCards.first!)
         } else {
@@ -137,7 +158,7 @@ class ViewController: UIViewController {
     }
     
     private func updateViewFromModel(){
-        var cardList = [Card]()
+        var cardList = [SetCard]()
         for cardView in cardViewList { cardList.append(cardView.card!)}
         let newCards = game.faceUpCards.filter { !cardList.contains($0)}
         let oldCards = cardList.filter { !game.faceUpCards.contains($0)}
@@ -223,14 +244,6 @@ class ViewController: UIViewController {
                 }
             }
             
-            if game.selectedCards.count == 3 {
-                if game.checkMatch() {
-                    setFound(set: selectedCardViews)
-                } else {
-                    setMismatch(set: selectedCardViews)
-                }
-            }
-            
             scoreLabel.text = "Score: \(game.score)"
             
             let setsAmount = game.matchedCards.count/3
@@ -239,12 +252,20 @@ class ViewController: UIViewController {
             } else {
                 numberOfSetsLabel.text = "\(game.matchedCards.count/3) Sets"
             }
+            
+            if game.selectedCards.count == 3 {
+                if game.checkMatch() {
+                    setFound(set: selectedCardViews)
+                } else {
+                    setMismatch(set: selectedCardViews)
+                }
+            }
         }
         redrawCards()
         
     }
     
-    private func loadOneCard(card: Card, index: Int) -> CardView{
+    private func loadOneCard(card: SetCard, index: Int) -> CardView{
         let cardView = CardView()
         cardView.card = card
         cardView.isOpaque = false
@@ -295,7 +316,7 @@ class ViewController: UIViewController {
             } )}
         }
 
-        Timer.scheduledTimer(withTimeInterval: 3, repeats: false) { timer in
+        Timer.scheduledTimer(withTimeInterval: 2.7, repeats: false) { timer in
             self.game.touchCard(card: self.game.selectedCards.first!)
             self.updateViewFromModel()
         }

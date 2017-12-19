@@ -10,10 +10,10 @@
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
-        <!--View Controller-->
+        <!--Set View Controller-->
         <scene sceneID="tne-QT-ifu">
             <objects>
-                <viewController id="BYZ-38-t0r" customClass="ViewController" customModule="Set" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController id="BYZ-38-t0r" customClass="SetViewController" customModule="Set" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="8bC-Xf-vdC">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -64,6 +64,12 @@
                                     <userDefinedRuntimeAttribute type="boolean" keyPath="layer.masksToBounds" value="YES"/>
                                 </userDefinedRuntimeAttributes>
                             </label>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Hi-Score: 0" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="4iD-zt-gVO">
+                                <rect key="frame" x="285.5" y="628" width="78.5" height="18"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="15"/>
+                                <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <nil key="highlightedColor"/>
+                            </label>
                         </subviews>
                         <color key="backgroundColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <constraints>
@@ -72,14 +78,17 @@
                             <constraint firstItem="AS8-kk-vTc" firstAttribute="width" secondItem="WcZ-cl-Z7E" secondAttribute="width" id="5MG-uu-Ehk"/>
                             <constraint firstItem="CVT-zF-SMW" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" constant="10" id="9mA-sa-2dl"/>
                             <constraint firstAttribute="trailing" relation="greaterThanOrEqual" secondItem="CVT-zF-SMW" secondAttribute="trailing" constant="20" symbolic="YES" id="CZh-M4-HRK"/>
+                            <constraint firstItem="4iD-zt-gVO" firstAttribute="centerY" secondItem="udp-zC-uSb" secondAttribute="centerY" id="Erx-YY-u7C"/>
                             <constraint firstItem="WcZ-cl-Z7E" firstAttribute="leading" secondItem="AS8-kk-vTc" secondAttribute="trailing" constant="30" id="IB6-3K-DtJ"/>
                             <constraint firstItem="CVT-zF-SMW" firstAttribute="centerY" secondItem="udp-zC-uSb" secondAttribute="centerY" id="S9E-2M-fML"/>
                             <constraint firstItem="udp-zC-uSb" firstAttribute="top" secondItem="AS8-kk-vTc" secondAttribute="bottom" constant="8" symbolic="YES" id="Xi9-8O-4Dk"/>
+                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="4iD-zt-gVO" secondAttribute="trailing" constant="11" id="cuk-Lb-dTm"/>
                             <constraint firstItem="AS8-kk-vTc" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" constant="30" id="dc2-1h-RBe"/>
                             <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="WcZ-cl-Z7E" secondAttribute="trailing" constant="30" id="eRz-z8-PZn"/>
                             <constraint firstItem="udp-zC-uSb" firstAttribute="centerX" secondItem="6Tk-OE-BBY" secondAttribute="centerX" id="erf-88-Mx0"/>
                             <constraint firstItem="AS8-kk-vTc" firstAttribute="top" secondItem="awb-6g-j3d" secondAttribute="bottom" constant="8" symbolic="YES" id="fja-3E-UIq"/>
                             <constraint firstItem="udp-zC-uSb" firstAttribute="top" secondItem="WcZ-cl-Z7E" secondAttribute="bottom" constant="8" symbolic="YES" id="nd3-cs-KSM"/>
+                            <constraint firstItem="4iD-zt-gVO" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="8bC-Xf-vdC" secondAttribute="leading" constant="20" symbolic="YES" id="oEY-Gs-6AV"/>
                             <constraint firstItem="6Tk-OE-BBY" firstAttribute="bottom" secondItem="udp-zC-uSb" secondAttribute="bottom" constant="20" id="toe-NE-jdQ"/>
                             <constraint firstItem="WcZ-cl-Z7E" firstAttribute="top" secondItem="awb-6g-j3d" secondAttribute="bottom" constant="8" symbolic="YES" id="tvi-OP-c9l"/>
                             <constraint firstItem="awb-6g-j3d" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" constant="10" id="wk7-cM-pBL"/>
@@ -90,6 +99,7 @@
                     <connections>
                         <outlet property="cardGrid" destination="awb-6g-j3d" id="7TW-fc-xSS"/>
                         <outlet property="dealButton" destination="AS8-kk-vTc" id="P8j-Tc-SJl"/>
+                        <outlet property="hiScoreLabel" destination="4iD-zt-gVO" id="Hyy-Y0-5gU"/>
                         <outlet property="numberOfSetsLabel" destination="WcZ-cl-Z7E" id="htI-jM-3RF"/>
                         <outlet property="scoreLabel" destination="udp-zC-uSb" id="oG2-qx-Qff"/>
                     </connections>

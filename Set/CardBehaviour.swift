@@ -72,6 +72,8 @@ class CardBehaviour: UIDynamicBehavior {
 
 extension CGFloat {
     var arc4Random: CGFloat {
+        let time = UInt32(NSDate().timeIntervalSinceReferenceDate)
+        srand48(Int(time))
         return self * CGFloat(drand48())
     }
 }
