@@ -82,15 +82,27 @@ class SetViewController: UIViewController {
     @IBOutlet weak var scoreLabel: UILabel!
 
     @IBAction func newGame(_ sender: UIButton) {
-        for cardView in cardViewList {
-            cardView.removeFromSuperview()
-        }
-        cardViewList.removeAll()
-        if game.score > hiScore { hiScore = game.score }
-        game = Set();
-        scoreLabel.text = "Score: \(game.score)"
-        numberOfSetsLabel.text = "\(game.matchedCards.count/3) Sets"
-        loadStartingCards()
+        let numberOfSets = game.numberOfSetsAvailable()
+        let alert = UIAlertController(title: "Alert", message: "There are \(numberOfSets) possible sets left. Are you sure you want to start a new game?", preferredStyle: UIAlertControllerStyle.alert)
+        
+        alert.addAction(UIAlertAction(title: "Continue", style: UIAlertActionStyle.default, handler: { action in
+                for cardView in self.cardViewList {
+                    cardView.removeFromSuperview()
+                }
+                self.cardViewList.removeAll()
+                if self.game.score > self.hiScore { self.hiScore = self.game.score }
+                self.game = Set();
+                self.scoreLabel.text = "Score: \(self.game.score)"
+                self.numberOfSetsLabel.text = "\(self.game.matchedCards.count/3) Sets"
+                self.dealButton.backgroundColor = UIColor.lightGray
+                self.dealButton.isEnabled = true
+                self.loadStartingCards()
+        }))
+        alert.addAction(UIAlertAction(title: "Cancel", style: UIAlertActionStyle.cancel, handler: nil))
+
+        // show the alert
+        self.present(alert, animated: true, completion: nil)
+        
     }
     
     @IBAction func dealCards(_ sender: Any) {
@@ -254,7 +266,7 @@ class SetViewController: UIViewController {
             }
             
             if game.selectedCards.count == 3 {
-                if game.checkMatch() {
+                if game.checkSelectedCards() {
                     setFound(set: selectedCardViews)
                 } else {
                     setMismatch(set: selectedCardViews)

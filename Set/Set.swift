@@ -70,48 +70,72 @@ struct Set {
         
     }
     
-    mutating func checkMatch() -> Bool{
+    mutating func numberOfSetsAvailable() -> Int {
+        
+        var numberOfSets = 0
+        
+        for i in 0..<Int(faceUpCards.count)-2 {
+            for j in i+1..<Int(faceUpCards.count)-1 {
+                for k in j+1..<Int(faceUpCards.count) {
+                    let cardsToCheck = [faceUpCards[i], faceUpCards[j], faceUpCards[k]]
+                    
+                    if checkMatch(cards: cardsToCheck) {
+                        numberOfSets += 1
+                    }
+                    
+                }
+            }
+            
+        }
+        
+        return numberOfSets
+    }
+    
+    mutating func checkSelectedCards() -> Bool {
+        
+        if checkMatch(cards: selectedCards) {
+            if faceUpCards.count > 39 {
+                score += 1
+                multiplier = 1
+            } else {
+                let newMultiplier = -((faceUpCards.count - 9) / 3) + 11
+                if newMultiplier < multiplier {
+                    multiplier = newMultiplier
+                }
+                score += multiplier
+            }
+            
+            matchedCards += selectedCards
+            
+            return true
+        } else {
+            score -= 5
+            return false
+        }
+        
+    }
+    
+    mutating func checkMatch(cards: [SetCard]) -> Bool{
         
         var colourAttributes = [Int]()
         var shapeAttributes = [Int]()
         var shadingAttributes = [Int]()
         var amountAttributes = [Int]()
         
-        for index in selectedCards.indices{
-            colourAttributes.append(selectedCards[index].identifier["colour"]!)
-            shapeAttributes.append(selectedCards[index].identifier["shape"]!)
-            shadingAttributes.append(selectedCards[index].identifier["shading"]!)
-            amountAttributes.append(selectedCards[index].identifier["amount"]!)
+        for index in cards.indices{
+            colourAttributes.append(cards[index].identifier["colour"]!)
+            shapeAttributes.append(cards[index].identifier["shape"]!)
+            shadingAttributes.append(cards[index].identifier["shading"]!)
+            amountAttributes.append(cards[index].identifier["amount"]!)
         }
         
         let attributes = [colourAttributes, shapeAttributes, shadingAttributes, amountAttributes]
         
         for attribute in attributes {
             if !(attribute.isUnique || attribute.isSame) {
-                print(attributes)
-                score -= 5
                 return false
-                
             }
         }
-        if faceUpCards.count > 39 {
-            score += 1
-            multiplier = 1
-        } else {
-            let newMultiplier = -((faceUpCards.count - 9) / 3) + 11
-            if newMultiplier < multiplier {
-                multiplier = newMultiplier
-            }
-            score += multiplier
-        }
-        
-//        for index in selectedCards.indices {
-//            let card = selectedCards[index]
-//            faceUpCards.remove(at: faceUpCards.index(of: card)!)
-//        }
-        
-        matchedCards += selectedCards
-        
         return true
         
     }
@@ -158,7 +182,6 @@ extension Array where Element: Equatable {
     var isSame: Bool {
         for index in 1...Int(count)-1 {
             if self[index] != self[index - 1] {
-                print("\(self[index]) != \(self[index-1])")
                 return false
             }
         }
