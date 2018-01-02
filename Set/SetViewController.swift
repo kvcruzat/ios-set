@@ -280,13 +280,13 @@ class SetViewController: UIViewController {
                             }, completion: { finished in
                                 if index == newCards.indices.last! {
                                     self.redrawCards()
+                                    DispatchQueue.global(qos: .userInitiated).async { [weak self] in
+                                        self?.game.numberOfSetsAvailable()
+                                    }
                                 }
                             })
                     })
                 }
-            }
-            DispatchQueue.global(qos: .userInitiated).async { [weak self] in
-                self?.game.numberOfSetsAvailable()
             }
         }
             
@@ -366,8 +366,8 @@ class SetViewController: UIViewController {
     private func setFound(set: [CardView]) {
         
         removeGestures()
-        self.view.isUserInteractionEnabled = false
-        
+        self.cardGrid.isUserInteractionEnabled = false
+        self.dealButton.isUserInteractionEnabled = false
         
         for (index, cardView) in set.enumerated(){
             cardView.layer.borderColor = UIColor.green.cgColor
@@ -391,7 +391,8 @@ class SetViewController: UIViewController {
         Timer.scheduledTimer(withTimeInterval: 2.7, repeats: false) { timer in
             self.game.touchCard(card: set.first!.card!)
             self.updateViewFromModel()
-            self.view.isUserInteractionEnabled = true
+            self.cardGrid.isUserInteractionEnabled = true
+            self.dealButton.isUserInteractionEnabled = true
         }
     }
     
