@@ -16,6 +16,7 @@ struct Set {
     var selectedCards = [SetCard]()
     
     var score = 0
+    var availableSets = 0
     
     private var multiplier = 100
     
@@ -42,6 +43,7 @@ struct Set {
                 faceUpCards.remove(at: faceUpCards.index(of: card)!)
             }
         }
+        
     }
     
     mutating func touchCard(card: SetCard){
@@ -70,25 +72,27 @@ struct Set {
         
     }
     
-    mutating func numberOfSetsAvailable() -> Int {
+    mutating func numberOfSetsAvailable() {
         
         var numberOfSets = 0
         
-        for i in 0..<Int(faceUpCards.count)-2 {
-            for j in i+1..<Int(faceUpCards.count)-1 {
-                for k in j+1..<Int(faceUpCards.count) {
-                    let cardsToCheck = [faceUpCards[i], faceUpCards[j], faceUpCards[k]]
-                    
-                    if checkMatch(cards: cardsToCheck) {
-                        numberOfSets += 1
+        if faceUpCards.count > 0 {
+            for i in 0..<Int(faceUpCards.count)-2 {
+                for j in i+1..<Int(faceUpCards.count)-1 {
+                    for k in j+1..<Int(faceUpCards.count) {
+                        let cardsToCheck = [faceUpCards[i], faceUpCards[j], faceUpCards[k]]
+                        
+                        if checkMatch(cards: cardsToCheck) {
+                            numberOfSets += 1
+                        }
+                        
                     }
-                    
                 }
+                
             }
-            
         }
         
-        return numberOfSets
+        availableSets = numberOfSets
     }
     
     mutating func checkSelectedCards() -> Bool {

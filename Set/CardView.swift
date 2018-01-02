@@ -14,6 +14,9 @@ class CardView: UIView {
     var card: SetCard?
     var isFaceUp = false { didSet{ setNeedsDisplay(); setNeedsLayout()}}
     
+    var cardSize: CGSize?
+    var isInitialized = false
+    
     var colour: UIColor = UIColor.red { didSet{ setNeedsDisplay(); setNeedsLayout()}}
     var shape: String = "squiggle" { didSet{ setNeedsDisplay(); setNeedsLayout()}}
     var amount: Int = 3 { didSet{ setNeedsDisplay(); setNeedsLayout()}}
@@ -44,6 +47,12 @@ class CardView: UIView {
     
     override func layoutSubviews() {
         super.layoutSubviews()
+        
+        if !isInitialized, cardSize != nil {
+            bounds.size = cardSize!
+            cardSize = nil
+            isInitialized = true
+        }
         
         let shapesBounds = bounds.size.applying(CGAffineTransform.identity.scaledBy(x: 0.7, y: 0.7))
         let shapeSize = shapesBounds.applying(CGAffineTransform.identity.scaledBy(x: 1.0, y: 0.3))
